@@ -1,19 +1,49 @@
 //ส่วนของการติดตั่งไลบลารี่
 #include "DHT.h"
+#include <WiFi.h>
+
+
+
+//กำหนดค่าคงที่
+const char* ssid = "MastreEWTC_2.4G";
+const char* password = "12345abcde";
+
 
 //กำหนดขาของ nodeMCU32s ให้รับค่าจาก DHT
 #define DHTPIN 23 
 
 // กำหนดชนิดของ DHT
 #define DHTTYPE DHT11   // DHT 11
-//#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
-//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+
 
 
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
   Serial.begin(9600);
+//  For Chekc Internet
+  Serial.println();
+  Serial.println();
+  Serial.print("Try to Connected to: ");
+  Serial.println(ssid);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  
+  while (WiFi.status() != WL_CONNECTED) {
+
+      delay(500);
+      Serial.print(".");
+    
+    }
+
+    Serial.println();
+    Serial.println("Can Connected WiFi");
+    Serial.println("IP Address ==> ");
+    Serial.println(WiFi.localIP());
+
+//  For DHT
   Serial.println("DHTxx test!");
 
   dht.begin();
